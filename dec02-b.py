@@ -3,7 +3,7 @@ import re
 
 passpatt = re.compile(r'(\d+)-(\d+) (.): (.+)')
 
-with open("indata-dec02.txt") as indata:
+with open("dec02-indata.txt") as indata:
     lines = list(indata)
     numbers = list()
     okPwds = 0

@@ -1,6 +1,6 @@
 from itertools import islice
 
-with open("indata-dec01.txt") as indata:
+with open("dec01-indata.txt") as indata:
     lines = list(indata)
     numbers = [int(i) for i in lines]
 
