@@ -1,7 +1,16 @@
-from itertools import islice
+import re
 
 REQUIRED_FIELDS = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
-OPTIONAL_FIELDS = ['cid']
+
+VALIDATORS = {
+    'byr': lambda value : re.match(r'\d\d\d\d', value),
+    'iyr': lambda value : re.match(r'\d\d\d\d', value),
+    'eyr': lambda value : re.match(r'\d\d\d\d', value),
+    'hgt': lambda value : re.match(r'\d\d\d?\w\w', value),
+    'hcl': lambda value : re.match(r'#[0-9a-f]{6}', value),
+    'ecl': lambda value : re.match(r'amb|blu|brn|gry|grn|hzl|oth', value),
+    'pid': lambda value : re.match(r'\d{9}', value)
+}
 
 with open("dec04-indata.txt") as indata:
     rows = [line.strip() for line in list(indata)]
@@ -22,7 +31,8 @@ with open("dec04-indata.txt") as indata:
             passports[-1] = passports[-1] | fields
     
     for passport in passports:
-        if all(passport.get(key) for key in REQUIRED_FIELDS):
+        if ( all(passport.get(key) for key in REQUIRED_FIELDS) and
+             all(not VALIDATORS.get(key) or VALIDATORS[key](passport[key]) for key in passport.keys()) ):
             valid += 1
         else:
             invalid += 1
