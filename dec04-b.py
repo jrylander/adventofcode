@@ -3,14 +3,24 @@ import re
 REQUIRED_FIELDS = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
 
 VALIDATORS = {
-    'byr': lambda value : re.match(r'\d\d\d\d', value),
-    'iyr': lambda value : re.match(r'\d\d\d\d', value),
-    'eyr': lambda value : re.match(r'\d\d\d\d', value),
-    'hgt': lambda value : re.match(r'\d\d\d?\w\w', value),
+    'byr': lambda value : re.match(r'\d\d\d\d', value) and int(value) >= 1920 and int(value) <= 2002,
+    'iyr': lambda value : re.match(r'\d\d\d\d', value) and int(value) >= 2010 and int(value) <= 2020,
+    'eyr': lambda value : re.match(r'\d\d\d\d', value) and int(value) >= 2020 and int(value) <= 2030,
+    'hgt': lambda value : heightIsOk(value),
     'hcl': lambda value : re.match(r'#[0-9a-f]{6}', value),
     'ecl': lambda value : re.match(r'amb|blu|brn|gry|grn|hzl|oth', value),
     'pid': lambda value : re.match(r'\d{9}', value)
 }
+
+def heightIsOk(value):
+    if (match := re.match(r'(\d\d\d?)(\w\w)', value)):
+        amount = int(match.group(1))
+        unit = match.group(2)
+        return (
+            (unit == 'cm' and amount >= 150 and amount <= 193) or
+            (unit == 'in' and amount >= 59 and amount <= 76)
+        )
+    return False
 
 with open("dec04-indata.txt") as indata:
     rows = [line.strip() for line in list(indata)]
@@ -37,4 +47,4 @@ with open("dec04-indata.txt") as indata:
         else:
             invalid += 1
 
-    print(valid, invalid)
+    print(f'{valid} valid out of {len(passports)}')
