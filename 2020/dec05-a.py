@@ -1,11 +1,27 @@
-from itertools import islice
-
 with open("dec05-indata.txt") as indata:
-    lines = list(indata)
-    numbers = [int(i) for i in lines]
+    cards = [card.strip() for card in list(indata)]
+    for card in cards:
+        fromRow = 1
+        toRow = 128
+        fromCol = 1
+        toCol = 8
+        for idx, character in enumerate(card):
+            if idx < 7:
+                step = int((toRow - fromRow + 1) / 2)
+                if character == 'F':
+                    toRow -= step
+                else:
+                    fromRow += step
+            else:
+                step = int((toCol - fromCol + 1) / 2)
+                if character == 'L':
+                    toCol -= step
+                else:
+                    fromCol += step
 
-    for firstIdx, firstNumber in enumerate(numbers):
-        for secondIdx, secondNumber in enumerate(islice(numbers, firstIdx+1)):
-            sumOfTheNumbers = firstNumber + secondNumber
-            if (sumOfTheNumbers == 2020):
-                print(f"{firstNumber} at {firstNumber} and {secondNumber} at {secondIdx} equals {firstNumber * secondNumber}")
+        row = fromRow - 1
+        col = fromCol - 1
+        seatID = row * 8 + col
+
+        print(seatID)
+    
