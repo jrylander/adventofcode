@@ -1,10 +1,8 @@
 with open("dec05-indata.txt") as indata:
     cards = [card.strip() for card in list(indata)]
     for card in cards:
-        fromRow = 1
-        toRow = 128
-        fromCol = 1
-        toCol = 8
+        (fromRow, toRow) = (1, 128)
+        (fromCol, toCol) = (1, 8)
         for idx, character in enumerate(card):
             if idx < 7:
                 step = int((toRow - fromRow + 1) / 2)
@@ -24,4 +22,3 @@ with open("dec05-indata.txt") as indata:
         seatID = row * 8 + col
 
         print(seatID)
-    
